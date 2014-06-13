@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#define FILE_MODE   (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+
 char    buf1[] = "abcdefghij";
 char    buf2[] = "ABCDEFGHIJ";
 
@@ -21,4 +23,21 @@ int main(void)
         return 1;
     }
     /* offset now = 10 */
+    if (lseek(fd, 16384, SEEK_SET) == -1)
+    {
+        fprintf(stderr, "lseek error");
+        return 1;
+    }
+
+    /* offset now = 16384 */
+
+    if (write(fd, buf2, 10) != 10)
+    {
+        fprintf(stderr, "buf2 write error");
+        return 1;
+    }
+    /* offset now = 16394 */
+
+    return 0;
+}
 
